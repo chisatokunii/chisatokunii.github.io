@@ -34,9 +34,16 @@
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 
 /* Default */
-.button.button-default {
+.button.button-default1 {
 	--button-text:#ffffff;
-	--button-background:#2457F5;
+	--button-background:#D2A050;
+	--button-border:1px solid #ffffff;
+}
+
+/* Default2 */
+.button.button-default2 {
+	--button-text:#000000;
+	--button-background:#EBF55A;
 	--button-border:1px solid #ffffff;
 }
 
