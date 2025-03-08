@@ -71,7 +71,7 @@
 	font-size:1.125rem;     				/* 18px */
     font-weight:400;
 	line-height:1.6;
-    background-image: url('../images/background.png'); /* add */
+    background-image: url('../images/pc-back.png'); /* add */
     background-size: cover; /* add */
     background-position: center; /* add */
     background-repeat: no-repeat; /* add */
@@ -125,7 +125,13 @@
 	margin-left: auto;
 	margin-right: auto;
 	display: block;
-  }
+	opacity: 0.5; /* 透過効果を追加 */
+	transition: opacity 0.2s ease; /* スムーズなトランジションを追加 */
+}
+
+.avatar:hover {
+	opacity: 1; /* ホバー時に透過を解除 */
+}
 
 /* Typography Scale */
 h1 {
@@ -383,4 +389,8 @@ ul li {
 	font-weight:800;
 	src:url('../fonts/open-sans-v34-vietnamese_latin-ext_latin_hebrew_greek-ext_greek_cyrillic-ext_cyrillic-800.eot');
 	src:url('../fonts/open-sans-v34-vietnamese_latin-ext_latin_hebrew_greek-ext_greek_cyrillic-ext_cyrillic-800.eot?#iefix') format('embedded-opentype'),url('../fonts/open-sans-v34-vietnamese_latin-ext_latin_hebrew_greek-ext_greek_cyrillic-ext_cyrillic-800.woff2') format('woff2'),url('../fonts/open-sans-v34-vietnamese_latin-ext_latin_hebrew_greek-ext_greek_cyrillic-ext_cyrillic-800.woff') format('woff'),url('../fonts/open-sans-v34-vietnamese_latin-ext_latin_hebrew_greek-ext_greek_cyrillic-ext_cyrillic-800.ttf') format('truetype'),url('../fonts/open-sans-v34-vietnamese_latin-ext_latin_hebrew_greek-ext_greek_cyrillic-ext_cyrillic-800.svg#OpenSans') format('svg');
+}
+
+h1 div {
+    color: #edcded; /* 薄い紫を16進数で指定 */
 }
