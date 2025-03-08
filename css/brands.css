@@ -12,7 +12,8 @@
   color:var(--button-text,#000000);
   background-color:var(--button-background,transparent);
 	border:var(--button-border,none);
-	transition:filter 0.2s ease,transform 0.2s ease;
+	transition:filter 0.2s ease,transform 0.2s ease, opacity 0.2s ease;
+  opacity: 0.5;
 }
 
 /* Global Button Hover Effect
@@ -20,6 +21,7 @@
 .button:hover,button:hover {
 	filter:brightness(90%);
 	transform:translateY(-1px);
+  opacity: 1;
 }
 
 /* Button Icons
