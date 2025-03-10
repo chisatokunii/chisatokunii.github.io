@@ -202,8 +202,8 @@ a:hover {
 	justify-content: flex-start; /* 左寄せに変更 */
 	width:18.75rem;             	/* 300px */
  	min-height:3rem;                /* 48px */
-  	padding:0.75rem 1rem;         	/* 12px ; 16px */
-  	font-size:1.125rem;           	/* 18px */
+	padding: 0.25rem 0.5rem; /* ボタン内のスペースを調整 */
+  	font-size: 1.25rem;            	/* 20px */
   	font-weight:700;
 	text-decoration:none;
 	white-space:normal;
@@ -392,9 +392,10 @@ ul li {
 }
 
 h1 div {
-    color: #edcded; /* 薄い紫を16進数で指定 */
+    color: #B090E0; /* 薄い紫を16進数で指定 */
 }
 
 p {
-    color: #edaded; /* 薄い紫を16進数で指定 */
+    color: #E444E4; /* 薄い紫を16進数で指定 */
+	font-weight: bold; /* 文字を太く設定 */
 }
