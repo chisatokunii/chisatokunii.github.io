@@ -1,401 +1,204 @@
-/*
-* LittleLink
-* https://littlelink.io
-* Free to use under the MIT license
-* http://www.opensource.org/licenses/mit-license.php
-*/
-
-/* Base Typography Settings
-–––––––––––––––––––––––––––––––––––––––––––––––––– */
-:root {
-	font-size:16px;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-/* Grid
-  –––––––––––––––––––––––––––––––––––––––––––––––––– */
-  .container {
-	position:relative;
-	width:100%;
-	max-width:37.5rem;     				/* 600px */
-    text-align:center;
-	margin:0 auto;
-	padding:3rem 1.25rem 0 1.25rem;
-	box-sizing:border-box;
-}
-.container-left {
-	position:relative;
-	width:100%;
-	max-width:37.5rem;
-	text-align:left;
-	margin:0 auto;
-	padding:0 1.25rem;
-	box-sizing:border-box;
-}
-.container-left p {
-	margin-bottom: 1rem;  				/* 16px space between paragraphs */
-  }
-.column {
-	position:center;
-	width:100%;
-	float:center;
-	box-sizing:border-box;
-}
-/* For devices larger than 400px */
-  @media (min-width:25rem) {            /* 400px */
-    .container {
-	width:85%;
-	padding-left:0;
-	padding-right:0;
-}
-}/* For devices larger than 550px */
-  @media (min-width:34.375rem) {        /* 550px */
-    .container {
-	width:80%;
-}
-.column,.columns {
-	margin-left:0;
-}
-.column:first-child,.columns:first-child {
-	margin-left:0;
-}
-}
-
-/* Base Styles
-  –––––––––––––––––––––––––––––––––––––––––––––––––– */
-  body {
-	margin:0;
-	padding:0;
-	background-color:#ffffff;
-	color:#1a1a1a;
-	font-family:"Open Sans",system-ui;
-	font-size:1.125rem;     				/* 18px */
-    font-weight:400;
-	line-height:1.6;
-    background-image: url('../images/pc-back.png'); /* add */
-    background-size: cover; /* add */
-    background-position: center; /* add */
-    background-repeat: no-repeat; /* add */
-}
-
-/* Typography
-  –––––––––––––––––––––––––––––––––––––––––––––––––– */
-  h1 {
-	margin:0 0 0.5rem 0;
-	font-size:3rem;         		/* 48px */
-    font-weight:800;
-	line-height:1;
-	letter-spacing:0;
-	word-wrap:break-word;
-	overflow-wrap:break-word;
-	hyphens:auto;           		/* Delete this to remove automatic hyphen on line break */
-}
-.container p {
-	margin:0 0 2rem 0;
-}
-
-/* Base Typography Settings
-–––––––––––––––––––––––––––––––––––––––––––––––––– */
-/* Base size - 16px browser default */
-:root {
-  font-size:16px;           /* Using a 1.25 modular scale for typography */
-  --scale-0:1rem;           /* 16px */
-  --scale-1:1.25rem;        /* 20px */
-  --scale-2:1.563rem;       /* 25px */
-  --scale-3:1.953rem;       /* 31px */
-  --scale-4:2.441rem;       /* 39px */
-  --scale-5:3.052rem;       /* 49px */
-  
-  /* Spacing units */
-  --spacing-xs:0.5rem;      /* 8px */
-  --spacing-s:1rem;         /* 16px */
-  --spacing-m:1.5rem;       /* 24px */
-  --spacing-l:2rem;         /* 32px */
-  --spacing-xl:3rem;        /* 48px */
-  --spacing-xxl:4rem;       /* 64px */
-}
-
-/* Avatar */
-.avatar {
-	width: 8rem;             /* 128px */
-	height: 8rem;
-	border-radius: 50%;
-	object-fit: cover;
-	background-position: center;
-	margin-bottom: var(--spacing-l);
-	margin-left: auto;
-	margin-right: auto;
-	display: block;
-	opacity: 0.6; /* 透過効果を追加 */
-	transition: opacity 0.2s ease; /* スムーズなトランジションを追加 */
-}
-
-.avatar:hover {
-	opacity: 0.9; /* ホバー時に透過を解除 */
-}
-
-/* Typography Scale */
-h1 {
-	margin:0 0 var(--spacing-m) 0;
-	font-size:var(--scale-5);           /* ~49px */
-  	font-weight:800;
-	line-height:1.1;
-	letter-spacing:-0.02em;
-	word-wrap:break-word;
-	overflow-wrap:break-word;
-}
 body {
-	font-size:var(--scale-1);           /* 20px */
-  	line-height:1.6;
-}
-.container p {
-	margin:0 0 var(--spacing-xl) 0;
-	font-size:var(--scale-1);
-	line-height:1.6;
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: Arial, sans-serif;
 }
 
-/* Container spacing */
 .container {
-	padding:var(--spacing-xl) var(--spacing-m) 0 var(--spacing-m);
-	text-align:center;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-/* Footer */
-footer {
-	margin:var(--spacing-xxl) 0;            /* 4rem (64px) top and bottom */
-    font-size:var(--scale-0);
+.loader {
+    position: relative;
+    width: 300px;
+    height: 400px;
+    border: 8px solid #8b7355;
+    border-radius: 10px;
+    overflow: hidden;
+    background: linear-gradient(180deg, #2c3e50 0%, #34495e 50%, #2c3e50 100%);
 }
 
-/* Responsive adjustments */
-@media (max-width:34.375rem) {              /* 550px */
-  h1 {
-	font-size:var(--scale-4);
-}
-body {
-	font-size:var(--scale-0);
-}
-.container p {
-	font-size:var(--scale-0);
-}
-.avatar {
-	margin-bottom:var(--spacing-m);
-}
-footer {
-	margin:var(--spacing-xl) 0;         	/* 3rem (48px) top and bottom */
-}
+.night-sky {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(ellipse at center, #34495e 0%, #2c3e50 50%, #1a252f 100%);
+    overflow: hidden;
 }
 
-/* Links
-  –––––––––––––––––––––––––––––––––––––––––––––––––– */
-  a {
-	color:#2457F5;
-	text-decoration:underline;
-}
-a:hover {
-	color:#083BDA;
-}
-
-/* Buttons
-–––––––––––––––––––––––––––––––––––––––––––––––––– */
-.button,button {
-	display:inline-flex;
-	align-items:center;
-	justify-content: flex-start; /* 左寄せに変更 */
-	width:18.75rem;             	/* 300px */
- 	min-height:3rem;                /* 48px */
-	padding: 0.25rem 0.5rem; /* ボタン内のスペースを調整 */
-  	font-size: 1.25rem;            	/* 20px */
-  	font-weight:700;
-	text-decoration:none;
-	white-space:normal;
-  	background-color:var(--button-background,transparent);
-	color:var(--button-text,#000000);
-	border:var(--button-border,none);
-	border-radius:0.5rem;
-	cursor:pointer;
-	box-sizing:border-box;
-	hyphens:auto;               	/* Delete this to remove automatic hyphen on line break */
-  	margin-bottom:1rem;
-	text-align:center;
-	line-height:1.3;
+.moon {
+    position: absolute;
+    top: 20%;
+    right: 25%;
+    width: 40px;
+    height: 40px;
+    background: #f1c40f;
+    border-radius: 50%;
+    box-shadow: 0 0 20px rgba(241, 196, 15, 0.4);
+    animation: moonGlow 3s ease-in-out infinite alternate;
 }
 
-/* Icons
-–––––––––––––––––––––––––––––––––––––––––––––––––– */
-.icon {
-	width:1.25rem;
-	height:1.25rem;
-	margin-right:0.5rem;
-	flex-shrink:0;
+@keyframes moonGlow {
+    0% {
+        box-shadow: 0 0 20px rgba(241, 196, 15, 0.4);
+        transform: scale(1);
+    }
+    100% {
+        box-shadow: 0 0 30px rgba(241, 196, 15, 0.8);
+        transform: scale(1.05);
+    }
 }
 
-/* Avatar
-  –––––––––––––––––––––––––––––––––––––––––––––––––– */
-.avatar {
-	width: 8rem;             /* 128px */
-	height: 8rem;
-	object-fit: cover;
-	background-position: center;
-	margin-bottom: var(--spacing-l);
-  }
-
-   /* Modifier for no avatar rounding */
-   .avatar--none {
-	border-radius: 0%;
-  }
-
-  /* Modifier for rounded avatar */
-  .avatar--rounded {
-	border-radius: 50%;
-  }
-  
-  /* Modifier for slightly rounded corners */
-  .avatar--soft {
-	border-radius: 0.5rem;   /* 8px rounded corners */
-  }
-
-/* Theme System
-  –––––––––––––––––––––––––––––––––––––––––––––––––– */
-/* Light theme is default above */
-  
-/* Dark theme */
-:root.theme-dark {
-	color-scheme:dark;
-}
-:root.theme-dark :focus-visible {
-	outline: 2px solid #4899F7;
-	outline-offset: 2px;
-  }
-:root.theme-dark body {
-	background-color:#121212;
-	color:#ffffff;
-}
-:root.theme-dark a:not(.button) {
-	color:#4899F7;
-}
-:root.theme-dark a:not(.button):hover {
-	color:#7AB8FF;
+.stars {
+    position: absolute;
+    width: 100%;
+    height: 100%;
 }
 
-/* Auto theme */
-:root.theme-auto {
-	color-scheme:light dark;
-}
-@media (prefers-color-scheme:dark) {
-	:root.theme-auto body {
-	background-color:#121212;
-	color:#ffffff;
-}
-:root.theme-auto :focus-visible {
-    outline: 2px solid #4899F7;
-    outline-offset: 2px;
-  }
-:root.theme-auto a:not(.button) {
-	color:#4899F7;
-}
-:root.theme-auto a:not(.button):hover {
-	color:#7AB8FF;
-}
+.stars::before,
+.stars::after {
+    content: '';
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: white;
+    border-radius: 50%;
+    animation: twinkle 2s infinite;
 }
 
-/* Button Text Color Override
-    –––––––––––––––––––––––––––––––––––––––––––––––––– */
-    .button:hover,button:hover {
-	color:var(--button-text);
+.stars::before {
+    top: 30%;
+    left: 20%;
+    animation-delay: 0s;
 }
 
-/* Responsive Typography
-  –––––––––––––––––––––––––––––––––––––––––––––––––– */
-  @media (max-width:34.375rem) {            /* 550px */
-    h1 {
-	font-size:2rem;                         /* 32px */
-	}
-	body {
-	font-size:1rem;                    		/* 16px */
-	}
+.stars::after {
+    top: 60%;
+    left: 70%;
+    animation-delay: 1s;
 }
 
-/* Privacy Page Styles
-  –––––––––––––––––––––––––––––––––––––––––––––––––– */
-nav {
-	margin:var(--spacing-l) 0;
-	text-align:left;
-}
-section {
-	margin:var(--spacing-xl) 0;
-	text-align:left;
-}
-h2 {
-	font-size:var(--scale-3);
-	font-weight:700;
-	margin-bottom:var(--spacing-m);
-}
-h3 {
-	font-size:var(--scale-2);
-	font-weight:600;
-	margin:var(--spacing-l) 0 var(--spacing-s) 0;
-}
-ul {
-	list-style:none;
-	padding:0;
-	margin:0 0 var(--spacing-m) 0;
-}
-ul li {
-	margin-bottom:var(--spacing-xs);
+@keyframes twinkle {
+    0%, 100% {
+        opacity: 0.3;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.5);
+    }
 }
 
-/* Privacy page specific responsive adjustments */
-  @media (max-width:34.375rem) {
-	h2 {
-	font-size:var(--scale-2);
-	}
-	h3 {
-	font-size:var(--scale-1);
-	}
-	section {
-	margin:var(--spacing-l) 0;
-	}
+.curtain {
+    position: absolute;
+    top: 0;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(
+        45deg,
+        #ff6b9d 0%,
+        #ff8a9b 25%,
+        #ffaaa5 50%,
+        #ffc3a0 75%,
+        #ff6b9d 100%
+    );
+    background-size: 20px 20px;
+    filter: blur(1px);
+    opacity: 0.9;
+    z-index: 10;
 }
 
-/* Font Face Definitions
-  –––––––––––––––––––––––––––––––––––––––––––––––––– */
-@font-face {
-	font-display:swap;
-	font-family:'Open Sans';
-	font-style:normal;
-	font-weight:400;
-	src:url('../fonts/open-sans-v34-vietnamese_latin-ext_latin_hebrew_greek-ext_greek_cyrillic-ext_cyrillic-regular.eot');
-	src:url('../fonts/open-sans-v34-vietnamese_latin-ext_latin_hebrew_greek-ext_greek_cyrillic-ext_cyrillic-regular.eot?#iefix') format('embedded-opentype'),url('../fonts/open-sans-v34-vietnamese_latin-ext_latin_hebrew_greek-ext_greek_cyrillic-ext_cyrillic-regular.woff2') format('woff2'),url('../fonts/open-sans-v34-vietnamese_latin-ext_latin_hebrew_greek-ext_greek_cyrillic-ext_cyrillic-regular.woff') format('woff'),url('../fonts/open-sans-v34-vietnamese_latin-ext_latin_hebrew_greek-ext_greek_cyrillic-ext_cyrillic-regular.ttf') format('truetype'),url('../fonts/open-sans-v34-vietnamese_latin-ext_latin_hebrew_greek-ext_greek_cyrillic-ext_cyrillic-regular.svg#OpenSans') format('svg');
-}
-@font-face {
-	font-display:swap;
-	font-family:'Open Sans';
-	font-style:normal;
-	font-weight:600;
-	src:url('../fonts/open-sans-v34-vietnamese_latin-ext_latin_hebrew_greek-ext_greek_cyrillic-ext_cyrillic-600.eot');
-	src:url('../fonts/open-sans-v34-vietnamese_latin-ext_latin_hebrew_greek-ext_greek_cyrillic-ext_cyrillic-600.eot?#iefix') format('embedded-opentype'),url('../fonts/open-sans-v34-vietnamese_latin-ext_latin_hebrew_greek-ext_greek_cyrillic-ext_cyrillic-600.woff2') format('woff2'),url('../fonts/open-sans-v34-vietnamese_latin-ext_latin_hebrew_greek-ext_greek_cyrillic-ext_cyrillic-600.woff') format('woff'),url('../fonts/open-sans-v34-vietnamese_latin-ext_latin_hebrew_greek-ext_greek_cyrillic-ext_cyrillic-600.ttf') format('truetype'),url('../fonts/open-sans-v34-vietnamese_latin-ext_latin_hebrew_greek-ext_greek_cyrillic-ext_cyrillic-600.svg#OpenSans') format('svg');
-}
-@font-face {
-	font-display:swap;
-	font-family:'Open Sans';
-	font-style:normal;
-	font-weight:700;
-	src:url('../fonts/open-sans-v34-vietnamese_latin-ext_latin_hebrew_greek-ext_greek_cyrillic-ext_cyrillic-700.eot');
-	src:url('../fonts/open-sans-v34-vietnamese_latin-ext_latin_hebrew_greek-ext_greek_cyrillic-ext_cyrillic-700.eot?#iefix') format('embedded-opentype'),url('../fonts/open-sans-v34-vietnamese_latin-ext_latin_hebrew_greek-ext_greek_cyrillic-ext_cyrillic-700.woff2') format('woff2'),url('../fonts/open-sans-v34-vietnamese_latin-ext_latin_hebrew_greek-ext_greek_cyrillic-ext_cyrillic-700.woff') format('woff'),url('../fonts/open-sans-v34-vietnamese_latin-ext_latin_hebrew_greek-ext_greek_cyrillic-ext_cyrillic-700.ttf') format('truetype'),url('../fonts/open-sans-v34-vietnamese_latin-ext_latin_hebrew_greek-ext_greek_cyrillic-ext_cyrillic-700.svg#OpenSans') format('svg');
-}
-@font-face {
-	font-display:swap;
-	font-family:'Open Sans';
-	font-style:normal;
-	font-weight:800;
-	src:url('../fonts/open-sans-v34-vietnamese_latin-ext_latin_hebrew_greek-ext_greek_cyrillic-ext_cyrillic-800.eot');
-	src:url('../fonts/open-sans-v34-vietnamese_latin-ext_latin_hebrew_greek-ext_greek_cyrillic-ext_cyrillic-800.eot?#iefix') format('embedded-opentype'),url('../fonts/open-sans-v34-vietnamese_latin-ext_latin_hebrew_greek-ext_greek_cyrillic-ext_cyrillic-800.woff2') format('woff2'),url('../fonts/open-sans-v34-vietnamese_latin-ext_latin_hebrew_greek-ext_greek_cyrillic-ext_cyrillic-800.woff') format('woff'),url('../fonts/open-sans-v34-vietnamese_latin-ext_latin_hebrew_greek-ext_greek_cyrillic-ext_cyrillic-800.ttf') format('truetype'),url('../fonts/open-sans-v34-vietnamese_latin-ext_latin_hebrew_greek-ext_greek_cyrillic-ext_cyrillic-800.svg#OpenSans') format('svg');
+.curtain::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="watercolor" patternUnits="userSpaceOnUse" width="100" height="100"><circle cx="20" cy="20" r="15" fill="%23ff9eaa" opacity="0.3"/><circle cx="80" cy="40" r="20" fill="%23ff7ba7" opacity="0.2"/><circle cx="50" cy="70" r="18" fill="%23ffb3c6" opacity="0.25"/></pattern></defs><rect width="100" height="100" fill="url(%23watercolor)"/></svg>') repeat;
+    mix-blend-mode: multiply;
 }
 
-h1 div {
-    color: #B090E0; /* 薄い紫を16進数で指定 */
+.curtain.left {
+    left: 0;
+    animation: curtainLeft 4s ease-in-out infinite;
+    transform-origin: left center;
 }
 
-p {
-    color: #E444E4; /* 薄い紫を16進数で指定 */
-	font-weight: bold; /* 文字を太く設定 */
+.curtain.right {
+    right: 0;
+    animation: curtainRight 4s ease-in-out infinite;
+    transform-origin: right center;
+}
+
+@keyframes curtainLeft {
+    0%, 20% {
+        transform: translateX(0) scaleX(1);
+    }
+    40%, 60% {
+        transform: translateX(-10px) scaleX(0.95);
+    }
+    80%, 100% {
+        transform: translateX(0) scaleX(1);
+    }
+}
+
+@keyframes curtainRight {
+    0%, 20% {
+        transform: translateX(0) scaleX(1);
+    }
+    40%, 60% {
+        transform: translateX(10px) scaleX(0.95);
+    }
+    80%, 100% {
+        transform: translateX(0) scaleX(1);
+    }
+}
+
+/* Add subtle shadows and depth */
+.loader::after {
+    content: '';
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    right: -5px;
+    bottom: -5px;
+    background: linear-gradient(45deg, rgba(0,0,0,0.1), transparent);
+    border-radius: 15px;
+    z-index: -1;
+}
+
+/* Additional stars for more realism */
+.stars {
+    background: 
+        radial-gradient(2px 2px at 40px 30px, white, transparent),
+        radial-gradient(2px 2px at 120px 80px, white, transparent),
+        radial-gradient(1px 1px at 200px 50px, white, transparent),
+        radial-gradient(1px 1px at 80px 120px, white, transparent),
+        radial-gradient(2px 2px at 180px 20px, white, transparent);
+    animation: sparkle 3s ease-in-out infinite;
+}
+
+@keyframes sparkle {
+    0%, 100% {
+        opacity: 0.6;
+    }
+    50% {
+        opacity: 1;
+    }
 }
