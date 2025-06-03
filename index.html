@@ -1,104 +1,1254 @@
 <!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Link Tree</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-<!-- 
-  To change the theme, change the class on the html tag below to one of:
-  - theme-auto: Automatically switches based on user's system preferences
-  - theme-light: Forces light theme
-  - theme-dark: Forces dark theme
--->
-
-<html class="theme-light" lang="jp"> <!-- Update`class="theme-auto" with your preference -->
-
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+        /* Loading Animation Styles */
+        .loader-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
         
-    <!-- Page Title - Change this to your name/brand (50-60 characters recommended) -->
-    <title>Chisato's Linktree</title>
-    <link rel="icon" type="image/x-icon" href="./images/mic.png"> <!-- Update this with your own favicon -->
-    
-    <!-- Meta Description - Write a description (150-160 characters recommended) -->
-    <meta name="description" content="Replace this with your own, this appears in search results and when sharing.">
-    
-    <!-- Keywords -->
-    <meta name="keywords" content="your name, industry, and specialties">
-    
-    <!-- Canonical URL - Helps prevent duplicate content issues -->
-    <meta rel="canonical" href="https://yourwebsite.com">
-    
-    <!-- Author Information -->
-    <meta name="author" content="Your Name">
-    
-    <!-- Stylesheets -->
-    <link rel="stylesheet" href="css/reset.css">
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/brands.css">
+        /* Loading screen background - same as main content */
+        .loader-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgb(76, 105, 165) 0%, rgb(41, 61, 99) 50%, rgb(93, 105, 120) 100%);
+            overflow: hidden;
+            z-index: -1;
+        }
 
-  </head>
+        .loading-container {
+            position: relative;
+            width: 300px;
+            height: 400px;
+            perspective: 1000px;
+        }
 
+        .window-frame {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            animation: frameFloat 4s ease-in-out infinite;
+            border: 4px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .curtains {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .curtain-left, .curtain-right {
+            position: absolute;
+            top: 0;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(145deg, 
+                rgba(255, 182, 193, 0.9) 0%,
+                rgba(255, 160, 180, 0.95) 30%,
+                rgba(255, 140, 170, 1) 60%,
+                rgba(240, 120, 150, 1) 100%);
+            filter: blur(0.5px);
+            border-radius: 0 0 20px 20px;
+            box-shadow: inset 0 -5px 15px rgba(200, 100, 130, 0.3);
+        }
+
+        .curtain-left {
+            left: 0;
+            border-radius: 0 0 20px 0;
+            animation: curtainSway 6s ease-in-out infinite;
+            transform-origin: top left;
+        }
+
+        .curtain-right {
+            right: 0;
+            border-radius: 0 0 0 20px;
+            animation: curtainSway 6s ease-in-out infinite reverse;
+            transform-origin: top right;
+        }
+
+        .window-content {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            right: 15px;
+            bottom: 15px;
+            background: linear-gradient(135deg, 
+                rgb(76, 105, 165) 0%,
+                rgb(41, 61, 99) 50%,
+                rgb(93, 105, 120) 100%);
+            border-radius: 4px;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .night-sky {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background: transparent;
+        }
+
+        .stars {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: starTwinkle 3s ease-in-out infinite;
+        }
+
+        .star:nth-child(1) { top: 20%; left: 15%; width: 2px; height: 2px; animation-delay: 0s; }
+        .star:nth-child(2) { top: 35%; left: 80%; width: 1px; height: 1px; animation-delay: 1s; }
+        .star:nth-child(3) { top: 60%; left: 25%; width: 1.5px; height: 1.5px; animation-delay: 2s; }
+        .star:nth-child(4) { top: 15%; left: 70%; width: 1px; height: 1px; animation-delay: 0.5s; }
+        .star:nth-child(5) { top: 55%; left: 60%; width: 2px; height: 2px; animation-delay: 1.5s; }
+        .star:nth-child(6) { top: 75%; left: 10%; width: 1px; height: 1px; animation-delay: 2.5s; }
+        .star:nth-child(7) { top: 25%; left: 45%; width: 1.5px; height: 1.5px; animation-delay: 3s; }
+        .star:nth-child(8) { top: 80%; left: 85%; width: 1px; height: 1px; animation-delay: 0.8s; }
+
+        .moon {
+            position: absolute;
+            top: 20%;
+            right: 25%;
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #f4f4a1 0%, #fff59d 100%);
+            border-radius: 50%;
+            box-shadow: 0 0 15px rgba(255, 245, 157, 0.4);
+            animation: moonGlow 4s ease-in-out infinite;
+            overflow: hidden;
+        }
+        
+        .moon::before {
+            content: "";
+            position: absolute;
+            top: -3px;
+            right: -18px;
+            width: 34px;
+            height: 34px;
+            background: rgb(41, 61, 99);
+            border-radius: 50%;
+        }
+
+        .loading-text {
+            position: absolute;
+            bottom: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(90deg, rgba(200, 170, 255, 0.9), rgba(230, 130, 200, 0.9));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-size: 18px;
+            font-weight: 300;
+            letter-spacing: 2px;
+            animation: textPulse 2s ease-in-out infinite;
+        }
+
+        .loading-dots {
+            display: inline-block;
+            animation: dotsAnimation 1.5s linear infinite;
+        }
+
+        @keyframes frameFloat {
+            0%, 100% { transform: translateY(0px) rotateX(0deg); }
+            50% { transform: translateY(-10px) rotateX(2deg); }
+        }
+
+        @keyframes curtainSway {
+            0%, 100% { transform: skewX(0deg) scaleX(1); }
+            25% { transform: skewX(1deg) scaleX(0.98); }
+            75% { transform: skewX(-1deg) scaleX(1.02); }
+        }
+        
+        @keyframes curtainPreOpen {
+            0% { transform: translateX(0); }
+            30% { transform: translateX(-15%); }
+            60% { transform: translateX(-10%); }
+            100% { transform: translateX(-12%); }
+        }
+        
+        @keyframes curtainPreOpenRight {
+            0% { transform: translateX(0); }
+            30% { transform: translateX(15%); }
+            60% { transform: translateX(10%); }
+            100% { transform: translateX(12%); }
+        }
+        
+        @keyframes curtainOpen {
+            0% { transform: translateX(-12%); }
+            100% { transform: translateX(-100%); }
+        }
+        
+        @keyframes curtainOpenRight {
+            0% { transform: translateX(12%); }
+            100% { transform: translateX(100%); }
+        }
+
+        @keyframes starTwinkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.5); }
+        }
+
+        @keyframes moonGlow {
+            0%, 100% { box-shadow: 0 0 15px rgba(255, 245, 157, 0.4); }
+            50% { box-shadow: 0 0 25px rgba(255, 245, 157, 0.6); }
+        }
+
+        @keyframes textPulse {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; }
+        }
+
+        @keyframes dotsAnimation {
+            0% { content: ""; }
+            25% { content: "."; }
+            50% { content: ".."; }
+            75% { content: "..."; }
+            100% { content: ""; }
+        }
+
+        .loading-dots::after {
+            content: "";
+            animation: dotsAnimation 1.5s linear infinite;
+        }
+
+        .fade-out {
+            animation: fadeOut 1s forwards;
+        }
+
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; visibility: hidden; }
+        }
+
+        /* Main content initially hidden */
+        .main-content {
+            display: none;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: transparent;
+            min-height: 100vh;
+            padding: 10px;
+            padding-top: 5px;
+            overflow-x: hidden;
+            position: relative;
+            margin: 0;
+        }
+        
+        /* Night Sky Background */
+        .stars-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgb(76, 105, 165) 0%, rgb(41, 61, 99) 50%, rgb(93, 105, 120) 100%);
+            overflow: hidden;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        /* Static Stars */
+        .static-star {
+            position: absolute;
+            background-color: white;
+            border-radius: 50%;
+            opacity: var(--brightness, 0.8);
+            box-shadow: 0 0 var(--glow, 2px) var(--glow, 2px) rgba(255, 255, 255, 0.5);
+            animation: twinkle var(--twinkle-duration, 4s) ease-in-out infinite;
+            animation-delay: var(--twinkle-delay, 0s);
+        }
+        
+        @keyframes twinkle {
+            0%, 100% { opacity: var(--brightness, 0.8); }
+            50% { opacity: var(--min-brightness, 0.2); }
+        }
+        
+        /* 削除：流れ星のスタイル設定 */
+
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            margin-top: 0;
+            padding-top: 0;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .basket-container {
+            position: relative;
+            width: 100%;
+            margin: 20px 0;
+            margin-top: 10px;
+            left: 0;
+        }
+        
+        .profile-photo-container {
+            position: absolute;
+            top: 3%;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+            width: min(220px, 35%);
+            height: min(220px, 35%);
+            aspect-ratio: 1 / 1; /* 縦横比を1:1に固定して円形に */
+        }
+        
+        .profile-photo-placeholder {
+            width: min(192px, 85%);
+            height: min(192px, 85%);
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.15);
+            border: min(5px, 0.8vw) solid rgba(200, 170, 255, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: min(72px, 25%);
+            color: rgba(255, 255, 255, 0.7);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(1px);
+            opacity: 0.85;
+            position: relative;
+            z-index: 1;
+            margin: 0 auto;
+            aspect-ratio: 1 / 1; /* 縦横比を1:1に固定して円形に */
+        }
+        
+        /* Decorative elements around the photo */
+        .profile-photo-container::before,
+        .profile-photo-container::after {
+            content: '';
+            position: absolute;
+            width: 158px; /* 210px × 0.75 = 157.5px */
+            height: 158px; /* 210px × 0.75 = 157.5px */
+            top: 4px; /* 5px × 0.75 = 3.75px, 四捨五入して4px */
+            left: 4px; /* 5px × 0.75 = 3.75px, 四捨五入して4px */
+            border-radius: 50%;
+            z-index: 0;
+            opacity: 0.6;
+            animation: rotate-decoration 12s linear infinite;
+            aspect-ratio: 1 / 1; /* 縦横比を1:1に固定して円形に */
+        }
+        
+        .profile-photo-container::before {
+            background: conic-gradient(
+                transparent 0deg,
+                rgba(255, 192, 203, 0.6) 40deg,
+                transparent 90deg,
+                rgba(200, 170, 255, 0.6) 170deg,
+                transparent 210deg,
+                rgba(255, 192, 203, 0.6) 320deg,
+                transparent 360deg
+            );
+            animation-direction: normal;
+        }
+        
+        .profile-photo-container::after {
+            background: conic-gradient(
+                transparent 0deg,
+                rgba(200, 170, 255, 0.5) 60deg,
+                transparent 150deg,
+                rgba(255, 192, 203, 0.5) 210deg,
+                transparent 270deg,
+                rgba(200, 170, 255, 0.5) 340deg,
+                transparent 360deg
+            );
+            animation-direction: reverse;
+            animation-duration: 15s;
+        }
+        
+        @keyframes rotate-decoration {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .background-section {
+            width: 100%;
+            height: auto;
+            display: block;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: -1px; /* Remove gaps between images */
+        }
+        
+        /* First image - only top corners rounded */
+        .background-section:first-of-type {
+            border-radius: 20px 20px 0 0;
+        }
+        
+        /* Middle images - no rounded corners */
+        .background-section:nth-of-type(2),
+        .background-section:nth-of-type(3),
+        .background-section:nth-of-type(4) {
+            border-radius: 0;
+        }
+        
+        /* Last image - only bottom corners rounded */
+        .background-section:last-of-type {
+            border-radius: 0 0 20px 20px;
+        }
+        
+        /* App Icons section styling */
+        .app-icons-container {
+            background-color: white;
+            width: 100%;
+        }
+        
+        .app-icons-image {
+            width: 60%; /* Make the image smaller - 60% */
+            margin: 0 0 0 auto; /* Right align the image */
+            display: block;
+            border-radius: 0; /* Ensure no rounded corners */
+            box-shadow: none; /* Remove shadow for app icons image */
+        }
+        
+        .smaller-app-icons {
+            width: 40%; /* Even smaller for the moved app icons - 40% */
+        }
+        
+        .flipped {
+            transform: scaleX(-1); /* Flip horizontally */
+        }
+        
+        /* Microphone section styling */
+        .microphone-container {
+            background-color: white;
+            width: 100%;
+        }
+        
+        .microphone-image {
+            width: 40%; /* Make the image smaller - 40% */
+            margin: 0 0 0 auto; /* Right align the image */
+            display: block;
+            border-radius: 0; /* Ensure no rounded corners */
+            box-shadow: none; /* Remove shadow for microphone image */
+        }
+        
+        .basket-container {
+            display: flex;
+            flex-direction: column;
+            overflow: hidden; /* Ensures clean edges */
+        }
+
+        .intro-text {
+            position: absolute;
+            top: 22%; /* モバイル用の位置 */
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            width: clamp(70%, 75%, 85%);
+            margin-bottom: 0;
+        }
+        
+        .intro-text h1 {
+            background: linear-gradient(90deg, rgba(200, 170, 255, 0.9), rgba(230, 130, 200, 0.9));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 5px;
+            font-size: clamp(20px, 5vw, 28px);
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+        }
+        
+        .intro-text p {
+            background: linear-gradient(90deg, rgba(200, 170, 255, 0.9), rgba(230, 130, 200, 0.9));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 1px;
+            font-size: clamp(12px, 3vw, 16px);
+            font-weight: 700;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+            line-height: 1.2;
+            max-width: 100%;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+        
+        .link-container {
+            position: absolute;
+            top: 55%;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: clamp(6px, 1.2vh, 10px);
+            width: clamp(70%, 75%, 85%);
+            text-align: left;
+        }
+
+        .link-item {
+            background: rgba(255, 255, 255, 0.00);
+            padding: min(9px, 1.3vh) min(30px, 5vw);
+            border-radius: 20px;
+            text-decoration: none;
+            color: white;
+            font-weight: 700;
+            font-size: clamp(14px, 2.5vw, 17px);
+            transition: all 0.3s ease;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            text-shadow: 
+                2px 2px 4px rgba(80, 50, 120, 0.8),
+                -1px -1px 2px rgba(100, 70, 150, 0.5),
+                0 0 15px rgba(200, 170, 255, 0.3);
+            letter-spacing: 0.5px;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            backdrop-filter: blur(0px);
+            box-shadow: 
+                0 4px 15px rgba(0, 0, 0, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+        
+        .link-item .icon-container {
+            width: 40px;
+            height: 40px;
+            margin-right: 16px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.05));
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(0px);
+            position: relative;
+            overflow: hidden;
+            padding: 8px;
+        }
+        
+        .link-item .icon-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: brightness(0) invert(1);
+            opacity: 0.9;
+        }
+        
+        .link-item .icon-container::before {
+            content: '';
+            position: absolute;
+            top: -1px;
+            left: -1px;
+            right: -1px;
+            bottom: -1px;
+            background: linear-gradient(45deg, 
+                rgba(200, 170, 255, 0.3) 0%,
+                rgba(255, 192, 203, 0.3) 25%,
+                rgba(200, 170, 255, 0.3) 50%,
+                rgba(255, 192, 203, 0.3) 75%,
+                rgba(200, 170, 255, 0.3) 100%
+            );
+            border-radius: 50%;
+            z-index: -1;
+            animation: iconBorderRotate 3s linear infinite;
+        }
+        
+        @keyframes iconBorderRotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .link-item img {
+            width: 20px;
+            height: 20px;
+            filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.5));
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Creating flowing effect with pseudo-element */
+        .link-item::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -150%;
+            width: 300%;
+            height: 100%;
+            background-image: url('cs11onydnt.jpg');
+            background-size: contain;
+            background-position: center;
+            opacity: 0;
+            z-index: -1;
+        }
+
+        .link-item:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-3px);
+            box-shadow: 
+                0 8px 0px rgba(80, 50, 120, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            text-shadow: 
+                2px 2px 6px rgba(80, 50, 120, 0.9),
+                -1px -1px 3px rgba(100, 70, 150, 0.6),
+                0 0 20px rgba(200, 170, 255, 0.5);
+            border-color: rgba(200, 170, 255, 0.8);
+        }
+        
+        .link-item:hover .icon-container {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.1));
+            border-color: rgba(255, 255, 255, 0.4);
+            transform: scale(1.1);
+        }
+        
+        .link-item:hover .icon-container::before {
+            animation-duration: 1.5s;
+        }
+
+        .link-item:hover::before {
+            animation: cometFlow 2s ease-in-out forwards;
+        }
+
+        @keyframes cometFlow {
+            0% {
+                transform: translateX(0%);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.4;
+            }
+            60% {
+                opacity: 0.2;
+            }
+            100% {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+
+        .link-item:nth-child(1) {
+            border-color: rgba(200, 170, 255, 0.9);
+        }
+
+        .link-item:nth-child(2) {
+            border-color: rgba(200, 170, 255, 0.9);
+        }
+
+        .link-item:nth-child(3) {
+            border-color: rgba(200, 170, 255, 0.9);
+        }
+
+        .link-item:nth-child(4) {
+            border-color: rgba(200, 170, 255, 0.9);
+        }
+
+        .link-item:nth-child(5) {
+            border-color: rgba(200, 170, 255, 0.9);
+        }
+        
+        .link-item:nth-child(6) {
+            border-color: rgba(200, 170, 255, 0.9);
+        }
+        
+        .link-item:nth-child(7) {
+            border-color: rgba(200, 170, 255, 0.9);
+        }
+        
+        .link-item:nth-child(8) {
+            border-color: rgba(200, 170, 255, 0.9);
+        }
+
+        .bottom-text {
+            position: absolute;
+            bottom: 1%;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            width: 80%;
+            color: rgba(200, 170, 255, 0.9);
+            font-size: 16px;
+            line-height: 1.5;
+            font-style: italic;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+        
+        .footer {
+            margin-top: 40px;
+            color: white;
+            font-weight: 700;
+            text-shadow: 
+                2px 2px 4px rgba(80, 50, 120, 0.8),
+                -1px -1px 2px rgba(100, 70, 150, 0.5),
+                0 0 15px rgba(200, 170, 255, 0.3);
+            letter-spacing: 0.5px;
+            line-height: 1.5;
+        }
+        
+        .motto-line1, .motto-line2, .motto-line3 {
+            font-size: 17px;
+            margin: 0;
+            color: rgba(200, 170, 255, 0.7);
+            text-shadow: 0px 0px 8px rgba(200, 170, 255, 0.4);
+            position: relative;
+            display: inline-block;
+        }
+        
+        .motto-line1 {
+            animation: light-glow 5s ease-in-out infinite;
+        }
+        
+        .motto-line2 {
+            animation: light-glow 5s ease-in-out infinite 1.7s;
+        }
+        
+        .motto-line3 {
+            animation: light-glow 5s ease-in-out infinite 3.3s;
+        }
+        
+        @keyframes light-glow {
+            0%, 100% { 
+                color: rgba(200, 170, 255, 0.7);
+                text-shadow: 0px 0px 8px rgba(200, 170, 255, 0.4);
+            }
+            50% { 
+                color: rgba(200, 170, 255, 1);
+                text-shadow: 0px 0px 15px rgba(200, 170, 255, 0.8), 0px 0px 25px rgba(200, 170, 255, 0.5);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                max-width: 95%;
+                padding: 15px;
+            }
+            
+            .basket-container {
+                width: 100%;
+                left: 0;
+            }
+            
+            .profile-photo-container {
+                width: 180px;
+                height: 180px;
+            }
+            
+            .profile-photo-placeholder {
+                width: 150px;
+                height: 150px;
+                font-size: 56px;
+            }
+            
+            .intro-text {
+                width: 95%;
+                top: 22%;
+            }
+            
+            .intro-text h1 {
+                font-size: 24px;
+            }
+            
+            .intro-text p {
+                font-size: 14px;
+                white-space: normal;
+            }
+            
+            .link-container {
+                width: 95%;
+                top: 55%;
+            }
+            
+            .link-item {
+                padding: 16px 20px;
+                font-size: 16px;
+            }
+            
+            .footer {
+                margin-top: 30px;
+            }
+            
+            .motto-line1, .motto-line2, .motto-line3 {
+                font-size: 15px;
+                margin: 4px 0;
+            }
+            
+            .motto-container {
+                margin-top: 10px;
+                text-align: center;
+            }
+        }
+
+        /* Simplified responsive design with only 2 breakpoints */
+        /* Base styles for desktop/larger screens */
+        @media (min-width: 768px) {
+            .container {
+                max-width: 500px;
+                margin-top: 0;
+            }
+            
+            .basket-container {
+                margin-top: 15px;
+                width: calc(100% + 20%);
+                left: -10%;
+            }
+            
+            .profile-photo-container {
+                width: min(195px, 30%); /* 260px × 0.75 = 195px */
+                height: min(195px, 30%); /* 260px × 0.75 = 195px */
+                top: 6%; /* 3%追加で下げる (もともとは3%) */
+            }
+            
+            .profile-photo-placeholder {
+                width: min(165px, 85%); /* 220px × 0.75 = 165px */
+                height: min(165px, 85%); /* 220px × 0.75 = 165px */
+                font-size: min(60px, 30%); /* 80px × 0.75 = 60px */
+            }
+            
+            .intro-text {
+                width: 70%;
+                top: 22%; /* さらに3%下げる (もともとは19%) */
+            }
+            
+            .intro-text h1 {
+                font-size: min(32px, 5vw);
+                margin-bottom: 5px;
+            }
+            
+            .intro-text p {
+                font-size: min(18px, 3vw);
+                margin-bottom: 1px;
+            }
+            
+            .link-container {
+                width: 70%;
+                gap: min(12px, 1.5vh);
+                top: 55%;
+            }
+            
+            .link-item {
+                padding: min(22px, 3vh) min(30px, 5vw);
+                font-size: min(19px, 3vw);
+            }
+        }
+        
+        /* Mobile styles */
+        @media (max-width: 767px) {
+            .container {
+                max-width: 95%;
+                margin-top: 0;
+                padding: 0;
+            }
+            
+            .basket-container {
+                margin-top: 5px;
+                width: 100%;
+                left: 0;
+            }
+            
+            .profile-photo-container {
+                width: min(180px, 40%);
+                height: min(180px, 40%);
+                top: 3%;
+                aspect-ratio: 1 / 1; /* 縦横比を1:1に固定して円形に */
+            }
+            
+            .profile-photo-placeholder {
+                width: min(160px, 90%);
+                height: min(160px, 90%);
+                font-size: min(60px, 35%);
+                border-width: min(3px, 0.5vw);
+                aspect-ratio: 1 / 1; /* 縦横比を1:1に固定して円形に */
+            }
+            
+            .profile-photo-container::before,
+            .profile-photo-container::after {
+                width: min(140px, 90%);
+                height: min(140px, 90%);
+                top: 2px;
+                left: 2px;
+                aspect-ratio: 1 / 1; /* 装飾要素も円形に */
+            }
+            
+            .intro-text {
+                width: 90%;
+                top: 22%; /* もう一つのモバイル用スタイル */
+            }
+            
+            .intro-text h1 {
+                font-size: min(24px, 6vw);
+                margin-bottom: 6px;
+            }
+            
+            .intro-text p {
+                font-size: min(14px, 3.5vw);
+                line-height: 1.2;
+                margin-bottom: 1px;
+            }
+            
+            .link-container {
+                width: 85%;
+                top: 55%;
+                gap: min(10px, 1.4vh);
+            }
+            
+            .link-item {
+                padding: min(6px, 0.8vh) min(18px, 3vw);
+                font-size: min(14px, 3.5vw);
+                border-width: min(2px, 0.3vw);
+            }
+            
+            .link-item .icon-container {
+                width: 30px;
+                height: 30px;
+                margin-right: 12px;
+            }
+            
+            .link-item img {
+                width: 14px;
+                height: 14px;
+            }
+            
+            .footer {
+                margin-top: 25px;
+            }
+            
+            .loading-container {
+                width: min(250px, 85vw);
+                height: min(320px, 80vh);
+            }
+            
+            .loading-text {
+                font-size: min(16px, 4vw);
+                bottom: -35px;
+            }
+        }
+    </style>
+</head>
 <body>
-
-    <div class="container">
-        <div class="column">
-
-            <!-- 
-              By default, the Avatar is rounded. Use the following:
-              - avatar--rounded: Automatically rounds the image
-              - avatar--soft: Slightly rounds the image
-              - avatar--none: Removes any rounding
-
-              Be sure to replace the src with your own image path and update the alt text
-            -->
-            <img class="avatar avatar--rounded" src="images/logo.png" alt="LittleLink">
-
-            <!-- Replace with your name or brand -->
-            <h1>
-              <div>Chisato Kunii</div>
-            </h1>
-            <!-- profile message -->
-            <p>ナレーター國井千聖の公式SNSリンク集です。<br>よろしくお願い申し上げます。</p>
-            <!-- All your buttons go here -->
-            <div class="button-stack" role="navigation">
-
-              <!-- chisato-kunii.jp -->
-              <a class="button button-default1" href="https://chisato-kunii.jp" target="_blank" rel="noopener" role="button">
-                <img class="icon" aria-hidden="true" src="images/icons/generic-website.svg" alt="Website Icon">official site
-              </a>
-
-              <!-- uni-cast.jp -->
-              <a class="button button-default2" href="https://uni-cast.jp/kuniichisato/" target="_blank" rel="noopener" role="button">
-                <img class="icon" aria-hidden="true" src="images/icons/generic-website.svg" alt="Website Icon">My talent agency
-              </a>
-
-              <!-- X (formerly Twitter) -->
-              <a class="button button-x" href="https://x.com/cashmere_voice" target="_blank" rel="noopener" role="button">
-                <img class="icon" aria-hidden="true" src="images/icons/x.svg" alt="X Logo">Follow on X
-              </a>
-
-              <!-- Instagram -->
-              <a class="button button-instagram" href="https://www.instagram.com/chisato.kunii" target="_blank" rel="noopener" role="button">
-                <img class="icon" aria-hidden="true" src="images/icons/generic-website.svg" alt="Instagram Logo">Instagram
-              </a>
-
-              <!-- wiki -->
-              <a class="button button button-default3" href="https://ja.wikipedia.org/wiki/%E5%9C%8B%E4%BA%95%E5%8D%83%E8%81%96" target="_blank" rel="noopener" role="button">
-                <img class="icon" aria-hidden="true" src="images/icons/generic-website.svg" alt="Wikipedia Icon">wikipedia
-              </a>
-
-            </div>
-
-            <!-- Add a short description about yourself or your brand -->
-            <p>Let's update every day,<br>and enjoy this world,<br>and express ourselves.</p>
-
-            <footer>
-                <!--
-                <a href="privacy.html">Privacy Policy</a> | Build your own by forking <a href="https://littlelink.io" target="_blank" rel="noopener">LittleLink</a>
-                -->
-            </footer>
+    <!-- Loading Animation -->
+    <div class="loader-container" id="loader">
+        <!-- Loading background - using the same background as main content -->
+        <div class="loader-background" id="loaderBackground">
+            <!-- Will be populated with the same stars as main content -->
+        </div>
         
+        <div class="loading-container">
+            <div class="window-frame">
+                <div class="window-content">
+                    <div class="night-sky" id="windowStars">
+                        <!-- Stars will be added by JavaScript to match main content -->
+                        <div class="moon"></div>
+                    </div>
+                </div>
+                <div class="curtains">
+                    <div class="curtain-left"></div>
+                    <div class="curtain-right"></div>
+                </div>
+            </div>
+            <div class="loading-text">Loading<span class="loading-dots"></span></div>
         </div>
     </div>
 
-</body>
+    <!-- Main Content -->
+    <div class="main-content" id="main-content">
+        <div class="stars-container" id="starsContainer">
+            <!-- Static stars will be added by JavaScript -->
+            <!-- Shooting stars will appear randomly -->
+        </div>
+        
+        <div class="container">
+            <div class="basket-container">
+                <!-- Top section with stars and moon -->
+                <img src="r734mtn2qu.jpg" alt="Night sky" class="background-section">
+                
+                <!-- Fifth App/Link section (smaller, moved from bottom) -->
+                <div class="app-icons-container">
+                    <img src="kwxnalu3w4.jpg" alt="App icons" class="background-section app-icons-image smaller-app-icons">
+                </div>
+                
+                <!-- Center section with person -->
+                <img src="0l07zd1d8v.jpg" alt="Radio host" class="background-section">
+                
+                <!-- Microphone section with white background -->
+                <div class="microphone-container">
+                    <img src="td6yt3f1s8.jpg" alt="Microphone" class="background-section microphone-image">
+                </div>
+                
 
+                
+                <!-- Bottom section with shapes -->
+                <img src="fls2ch36gx.jpg" alt="Colorful shapes" class="background-section">
+                
+                <div class="profile-photo-container">
+                    <div class="profile-photo-placeholder">
+                        <img src="logo.png" alt="Chisato Kunii" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                    </div>
+                </div>
+                
+                <div class="link-container">
+                    <a href="https://chisato-kunii.jp/" class="link-item" target="_blank" rel="noopener">
+                        <div class="icon-container">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z" fill="currentColor"/>
+                            </svg>
+                        </div>
+                        Official Site
+                    </a>
+                    <a href="https://uni-cast.jp/kuniichisato/" class="link-item" target="_blank" rel="noopener">
+                        <div class="icon-container">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z" fill="currentColor"/>
+                            </svg>
+                        </div>
+                        My Talent Agency
+                    </a>
+                    <a href="https://x.com/cashmere_voice" class="link-item" target="_blank" rel="noopener">
+                        <div class="icon-container">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" fill="currentColor"/>
+                            </svg>
+                        </div>
+                        Follow on X
+                    </a>
+                    <a href="https://www.instagram.com/chisato.kunii" class="link-item" target="_blank" rel="noopener">
+                        <div class="icon-container">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" fill="currentColor"/>
+                            </svg>
+                        </div>
+                        Instagram
+                    </a>
+                    <a href="https://note.com/chisatokunii" class="link-item" target="_blank" rel="noopener">
+                        <div class="icon-container">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                                <path d="M19.5 3.5L18 2l-1.5 1.5L15 2l-1.5 1.5L12 2l-1.5 1.5L9 2 7.5 3.5 6 2 4.5 3.5 3 2v20l1.5-1.5L6 22l1.5-1.5L9 22l1.5-1.5L12 22l1.5-1.5L15 22l1.5-1.5L18 22l1.5-1.5L21 22V2l-1.5 1.5zM19 19.09H5V4.91h14v14.18zM6 15h12v2H6zm0-4h12v2H6zm0-4h12v2H6z" fill="currentColor"/>
+                            </svg>
+                        </div>
+                        note
+                    </a>
+                    <a href="https://ja.wikipedia.org/wiki/%E5%9C%8B%E4%BA%95%E5%8D%83%E8%81%96" class="link-item" target="_blank" rel="noopener">
+                        <div class="icon-container">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z" fill="currentColor"/>
+                            </svg>
+                        </div>
+                        Wikipedia
+                    </a>
+                </div>
+                
+                <div class="intro-text">
+                    <h1>Chisato Kunii</h1>
+                    <p>ナレーター國井千聖の公式SNSリンク集です。</p>
+                    <p>よろしくお願い致します。</p>
+                </div>
+            </div>
+            
+            <div class="footer">
+                <div class="motto-container">
+                    <p class="motto-line1">Let's update every day,</p>
+                    <p class="motto-line2">and enjoy this world,</p>
+                    <p class="motto-line3">and express ourselves.</p>
+                </div>
+            </div>
+            
+            <div class="bottom-text" style="display: none;">
+                <p>✨ Connect with me everywhere ✨</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // Create random static stars
+        function createStaticStars() {
+            const starsContainer = document.getElementById('starsContainer');
+            const numStars = 200; // Number of static stars
+            
+            for (let i = 0; i < numStars; i++) {
+                const star = document.createElement('div');
+                star.className = 'static-star';
+                
+                // Random properties
+                const size = Math.random() * 2 + 1; // 1-3px
+                const brightness = Math.random() * 0.6 + 0.4; // 0.4-1.0
+                const minBrightness = brightness * 0.3; // Dim to 30% of max brightness
+                const glow = size * (0.5 + Math.random() * 1.5); // Glow relative to size
+                
+                // Position randomly
+                const left = Math.random() * 100;
+                const top = Math.random() * 100;
+                
+                // Animation timing
+                const twinkleDuration = Math.random() * 4 + 2; // 2-6s
+                const twinkleDelay = Math.random() * 5; // 0-5s
+                
+                // Apply styles
+                star.style.width = size + 'px';
+                star.style.height = size + 'px';
+                star.style.left = left + '%';
+                star.style.top = top + '%';
+                star.style.setProperty('--brightness', brightness);
+                star.style.setProperty('--min-brightness', minBrightness);
+                star.style.setProperty('--glow', glow + 'px');
+                star.style.setProperty('--twinkle-duration', twinkleDuration + 's');
+                star.style.setProperty('--twinkle-delay', twinkleDelay + 's');
+                
+                starsContainer.appendChild(star);
+            }
+        }
+        
+        // 削除：流れ星生成用の関数
+        function createShootingStars() {
+            // 流れ星機能を削除
+            console.log("Shooting stars have been removed");
+        }
+        
+        // Create stars for loading screen background (same as main content)
+        function createLoadingStars() {
+            const loaderBackground = document.getElementById('loaderBackground');
+            const windowStars = document.getElementById('windowStars');
+            const numStars = 100; // Fewer stars for loading screen background
+            const numWindowStars = 20; // Even fewer stars for window content
+            
+            // Create stars for loader background
+            for (let i = 0; i < numStars; i++) {
+                const star = document.createElement('div');
+                star.className = 'static-star';
+                
+                // Random properties
+                const size = Math.random() * 2 + 1; // 1-3px
+                const brightness = Math.random() * 0.6 + 0.4; // 0.4-1.0
+                const minBrightness = brightness * 0.3; // Dim to 30% of max brightness
+                const glow = size * (0.5 + Math.random() * 1.5); // Glow relative to size
+                
+                // Position randomly
+                const left = Math.random() * 100;
+                const top = Math.random() * 100;
+                
+                // Animation timing
+                const twinkleDuration = Math.random() * 4 + 2; // 2-6s
+                const twinkleDelay = Math.random() * 5; // 0-5s
+                
+                // Apply styles
+                star.style.width = size + 'px';
+                star.style.height = size + 'px';
+                star.style.left = left + '%';
+                star.style.top = top + '%';
+                star.style.setProperty('--brightness', brightness);
+                star.style.setProperty('--min-brightness', minBrightness);
+                star.style.setProperty('--glow', glow + 'px');
+                star.style.setProperty('--twinkle-duration', twinkleDuration + 's');
+                star.style.setProperty('--twinkle-delay', twinkleDelay + 's');
+                
+                loaderBackground.appendChild(star);
+            }
+            
+            // Create stars for window content
+            for (let i = 0; i < numWindowStars; i++) {
+                const star = document.createElement('div');
+                star.className = 'static-star';
+                
+                // Random properties
+                const size = Math.random() * 2 + 1; // 1-3px
+                const brightness = Math.random() * 0.6 + 0.4; // 0.4-1.0
+                const minBrightness = brightness * 0.3; // Dim to 30% of max brightness
+                const glow = size * (0.5 + Math.random() * 1.5); // Glow relative to size
+                
+                // Position randomly
+                const left = Math.random() * 100;
+                const top = Math.random() * 100;
+                
+                // Animation timing
+                const twinkleDuration = Math.random() * 4 + 2; // 2-6s
+                const twinkleDelay = Math.random() * 5; // 0-5s
+                
+                // Apply styles
+                star.style.width = size + 'px';
+                star.style.height = size + 'px';
+                star.style.left = left + '%';
+                star.style.top = top + '%';
+                star.style.setProperty('--brightness', brightness);
+                star.style.setProperty('--min-brightness', minBrightness);
+                star.style.setProperty('--glow', glow + 'px');
+                star.style.setProperty('--twinkle-duration', twinkleDuration + 's');
+                star.style.setProperty('--twinkle-delay', twinkleDelay + 's');
+                
+                windowStars.appendChild(star);
+            }
+        }
+        
+        // Wait for the page to fully load
+        window.addEventListener('load', function() {
+            // Create static stars for loader background
+            createLoadingStars();
+            
+            // Create static stars for main content
+            createStaticStars();
+            
+            // Start shooting star animation
+            createShootingStars();
+            
+            setTimeout(function() {
+                // First slightly open the curtains
+                const leftCurtain = document.querySelector('.curtain-left');
+                const rightCurtain = document.querySelector('.curtain-right');
+                
+                // Change the animation to slightly open the curtains
+                leftCurtain.style.animation = 'curtainPreOpen 1.2s forwards';
+                rightCurtain.style.animation = 'curtainPreOpenRight 1.2s forwards';
+                
+                // Then fully open the curtains
+                setTimeout(function() {
+                    // Change the animation to fully open the curtains
+                    leftCurtain.style.animation = 'curtainOpen 1.5s forwards';
+                    rightCurtain.style.animation = 'curtainOpenRight 1.5s forwards';
+                    
+                    // Fade out after curtains open
+                    setTimeout(function() {
+                        // Add the fade-out class to the loader
+                        document.getElementById('loader').classList.add('fade-out');
+                        
+                        // Show the main content after animation completes
+                        setTimeout(function() {
+                            document.getElementById('loader').style.display = 'none';
+                            document.getElementById('main-content').style.display = 'block';
+                        }, 1000); // Match this with the fadeOut animation duration
+                    }, 1500); // Wait for curtains to open
+                }, 1200); // Wait for pre-open animation
+            }, 3000); // Wait 3 seconds before starting the animation
+        });
+    </script>
+</body>
 </html>
